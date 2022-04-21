@@ -1,0 +1,96 @@
+# Kconfig settings for Atmel SAMC processors
+
+if MACH_ATSAMC
+
+config ATSAMC_SELECT
+    bool
+    default y
+    select HAVE_GPIO
+    select HAVE_GPIO_ADC
+    select HAVE_GPIO_I2C
+    select HAVE_GPIO_SPI
+    select HAVE_GPIO_HARD_PWM
+    select HAVE_GPIO_BITBANGING
+    select HAVE_STRICT_TIMING
+    select HAVE_CHIPID
+    select HAVE_STEPPER_BOTH_EDGE
+    select HAVE_SERCOM
+
+config HAVE_SERCOM
+    default y
+
+config BOARD_DIRECTORY
+    string
+    default "atsamc"
+
+choice
+    prompt "Processor model"
+    config MACH_SAMC21G18
+        bool "SAMC21G18 (Duet 3 Toolboard)"
+        select MACH_SAMC21
+endchoice
+
+config MACH_SAMC21
+    bool
+
+config HAVE_SAMC21_CANBUS
+    bool
+    default y
+
+config MCU
+    string
+    default "samc21g18a" if MACH_SAMC21G18
+
+config FLASH_SIZE
+    hex
+    default 0x40000 if MACH_SAMC21G18
+
+config RAM_START
+    hex
+    default 0x20000000
+
+config RAM_SIZE
+    hex
+    default 0x8000 if MACH_SAMC21G18
+
+config STACK_SIZE
+    int
+    default 512
+
+choice
+    prompt "Bootloader offset"
+    config FLASH_START_2000
+        depends on MACH_SAMC21
+        bool "8KiB bootloader"
+    config FLASH_START_4000
+        bool "16KiB bootloader"
+    config FLASH_START_0000
+        bool "No bootloader"
+endchoice
+
+config CLOCK_FREQ
+    int
+    default 48000000
+
+config FLASH_START
+    hex
+    default 0x0000
+
+config SERIAL
+    bool
+choice
+    prompt "Communication interface"
+    config ATSAMC_SERIAL
+        bool "Serial"
+        select SERIAL
+    config ATSAMC_CAN
+        bool "CAN bus"
+        depends on HAVE_SAMC21_CANBUS
+        select CANSERIAL
+endchoice
+
+config CANBUS_FREQUENCY
+    int "CAN bus speed" if LOW_LEVEL_OPTIONS && CANSERIAL
+    default 500000
+
+endif

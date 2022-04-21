@@ -17,6 +17,8 @@ choice
         bool "SAM3/SAM4/SAM E70 (Due and Duet)"
     config MACH_ATSAMD
         bool "SAMD21/SAMD51"
+    config MACH_ATSAMC
+        bool "SAMC21"
     config MACH_LPC176X
         bool "LPC176x (Smoothieboard)"
     config MACH_STM32
@@ -34,6 +36,7 @@ endchoice
 source "src/avr/Kconfig"
 source "src/atsam/Kconfig"
 source "src/atsamd/Kconfig"
+source "src/atsamc/Kconfig"
 source "src/lpc176x/Kconfig"
 source "src/stm32/Kconfig"
 source "src/rp2040/Kconfig"
